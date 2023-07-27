@@ -26,6 +26,36 @@ export default class Field {
       this.render();
       elements.counterClick.addClick();
     }
+
+    function openEmptyCells(row, column) {
+      const currentCell = document.querySelector(`#c${row}-${column}`);
+
+      if (!currentCell) return;
+      if (currentCell.classList.contains('open')) return;
+      if (currentCell.classList.contains('mine')) {
+        return;
+      }
+
+      if (+currentCell.textContent > 0) {
+        currentCell.classList.add('open');
+        return;
+      }
+
+      currentCell.classList.add('open');
+      const [r, c] = currentCell.id.slice(1).split('-');
+      for (let i = -1; i <= 1; i += 1) {
+        for (let j = -1; j <= 1; j += 1) {
+          openEmptyCells(+r + i, +c + j);
+        }
+      }
+    }
+
+    if (cell.textContent === '') {
+      console.log('sss');
+      const [row, column] = cell.id.slice(1).split('-');
+      openEmptyCells(row, column);
+    }
+
     elements.counterClick.addClick();
     cell.classList.add('open');
   }
@@ -55,11 +85,15 @@ export default class Field {
   render() {
     this.root.innerHTML = '';
 
-    const cells = this.createMatrix().flat();
+    const cells = this.createMatrix();
 
-    cells.forEach((el) => {
-      const cell = new Cell(el);
-      this.root.append(cell.root);
+    cells.forEach((row, idx) => {
+      const indexRow = idx;
+      row.forEach((el, index) => {
+        const id = `c${indexRow}-${index}`;
+        const cell = new Cell(el, id);
+        this.root.append(cell.root);
+      });
     });
   }
 

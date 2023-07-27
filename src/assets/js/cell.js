@@ -3,9 +3,10 @@ import createElement from './helpers/createElement';
 export default class Cell {
   root;
 
-  constructor(content) {
+  constructor(content, id) {
     this.content = content;
-    this.root = createElement('div', { className: 'cell' });
+    this.id = id;
+    this.root = createElement('div', { className: 'cell', id });
     this.render();
   }
 
