@@ -1,3 +1,5 @@
-import './sass/main.scss';
+import App from './assets/js/app';
+import './assets/sass/main.scss';
 
-console.log('Hello Andrei');
+const app = new App();
+app.start();

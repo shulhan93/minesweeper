@@ -34,7 +34,10 @@
     "es6": true
   },
   "rules": {
-    "no-console": "off"
+    "no-console": "off",
+    "no-continue": "off",
+    "class-methods-use-this": "off",
+    "import/no-cycle": "off"
     // "comma-dangle": "off",
     // "no-unused-expressions": "off",
     // "arrow-body-style": "off",

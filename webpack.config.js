@@ -1,34 +1,30 @@
-const path = require("path");
-const HTMLWebpackPlugin = require("html-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const ESLintPlugin = require("eslint-webpack-plugin");
-//const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
+const path = require('path');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
-const isDev = process.env.NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 
-// Если что-то не будет устраивать в перезагрузке то прочитать про HotModuleReplacement
-
 module.exports = {
-  context: path.resolve(__dirname, "src"), // от какой папки отталкиваться вебпаку
-  mode: "development",
+  context: path.resolve(__dirname, 'src'), // от какой папки отталкиваться вебпаку
+  mode: 'development',
   entry: {
-    main: "./index.js",
-    //analytics: './analytics.js',
+    main: './index.js',
   },
 
   output: {
-    filename: "[name].[contenthash].js",
-    path: path.resolve(__dirname, "dist"),
-    assetModuleFilename: "[name].[contenthash][ext]",
+    filename: '[name].[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+    assetModuleFilename: '[name].[contenthash][ext]',
     clean: true,
   },
 
   resolve: {
-    extensions: [".js", ".ts"],
+    extensions: ['.js', '.ts'],
   },
 
   optimization: {
@@ -37,69 +33,48 @@ module.exports = {
         extractComments: false,
       }),
       new CssMinimizerPlugin(),
-      // new ImageMinimizerPlugin({
-      //   minimizer: {
-      //     implementation: ImageMinimizerPlugin.imageminMinify,
-      //     options: {
-      //       plugins: [
-      //         ['gifsicle', { interlaced: true }],
-      //         ['jpegtran', { progressive: true }],
-      //         ['optipng', { optimizationLevel: 1 }],
-      //         ['svgo', { name: 'preset-default' }],
-      //       ],
-      //     },
-      //   },
-      // }),
     ],
     splitChunks: {
-      chunks: "all",
+      chunks: 'all',
       name: (module, chunks, cacheGroupKey) => {
-        return "vendor";
+        return 'vendor';
       },
     },
-    // runtimeChunk: 'single'
   },
 
-  //devtool: isDev ? 'source-map': '',
   devServer: {
     port: 9000,
-    static: "./src",
+    static: './src',
     hot: isDev,
   },
 
   plugins: [
     new HTMLWebpackPlugin({
-      template: "./index.html",
+      template: './index.html',
       minify: {
         collapseWhitespace: isProd,
       },
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].[contenthash].css",
+      filename: '[name].[contenthash].css',
     }),
     new ESLintPlugin(),
-
-    // new CopyPlugin({
-    //   patterns: [
-    //     { from: path.resolve(__dirname, 'src/favicon.ico'), to: path.resolve(__dirname, 'dist') },
-    //   ],
-    // }),
   ],
 
   module: {
     rules: [
-      { test: /\.([cm]?ts|tsx)$/, loader: "ts-loader" },
+      { test: /\.([cm]?ts|tsx)$/, loader: 'ts-loader' },
       {
         test: /\.js$/,
-        use: "babel-loader",
+        use: 'babel-loader',
         exclude: /node_modules/,
       },
       {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
-          "css-loader",
-          "group-css-media-queries-loader",
+          'css-loader',
+          'group-css-media-queries-loader',
         ],
       },
       {
@@ -108,10 +83,10 @@ module.exports = {
           // Creates `style` nodes from JS strings
           MiniCssExtractPlugin.loader,
           // Translates CSS into CommonJS
-          "css-loader",
+          'css-loader',
           // Compiles Sass to CSS
-          "sass-loader",
-          "group-css-media-queries-loader",
+          'sass-loader',
+          'group-css-media-queries-loader',
         ],
       },
 
@@ -121,7 +96,7 @@ module.exports = {
           ? []
           : [
               {
-                loader: "image-webpack-loader",
+                loader: 'image-webpack-loader',
                 options: {
                   mozjpeg: {
                     progressive: true,
@@ -142,17 +117,24 @@ module.exports = {
                 },
               },
             ],
-        type: "asset/resource",
+        type: 'asset/resource',
         generator: {
-          filename: "images/[name].[contenthash][ext]",
+          filename: 'images/[name].[contenthash][ext]',
         },
       },
 
       {
         test: /\.(ttf|woff|woff2|eot)$/i,
-        type: "asset/resource",
+        type: 'asset/resource',
         generator: {
-          filename: "fonts/[name].[contenthash][ext]",
+          filename: 'fonts/[name].[contenthash][ext]',
+        },
+      },
+      {
+        test: /\.mp3$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'audio/[name].[contenthash][ext]',
         },
       },
     ],
